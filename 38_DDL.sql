@@ -84,7 +84,7 @@ INSERT INTO `Units` (`Price`, `Rented`, `Note`, `BuildingID`, `UnitTypeID`) VALU
 
 -- --------------------------------------------------------
 
-CREATE TABLE `MaintenenceRequests` (
+CREATE TABLE `MaintenanceRequests` (
   `RequestID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `UnitID` int(11) NOT NULL,
   `TenantID` int(11) NOT NULL,
