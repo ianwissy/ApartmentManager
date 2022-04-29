@@ -1,11 +1,11 @@
 import mysql.connector as db
-from credentials import host, database, user, password
-
 
 def connect_to_database():
-    connection = db.connect(host=host, database=database, user=user, password=password)
+    connection = db.connect(host='classmysql.engr.oregonstate.edu',
+                        database="cs340_wysei",
+                        user="cs340_wysei",
+                        password="6820")
     return connection
-
 
 def get_table(name, connection):
     query = "select * from " + name

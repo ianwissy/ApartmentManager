@@ -1,0 +1,24 @@
+<header>
+
+</header>
+<body>
+    <table id=datatable>
+    </table>
+    <script>
+        function makeTable() {
+          let data = {{table | safe}}
+          const dataTable = document.getElementById("datatable");
+          for (let row in data){
+            let tableRow = document.createElement("tr");
+            for (let cell in data[row]){
+              let tableCell = document.createElement("td");
+              tableCell.innerText = data[row][cell]
+              tableRow.appendChild(tableCell)
+            }
+            dataTable.appendChild(tableRow)
+          }
+        }
+
+        makeTable()
+    </script>
+</body>

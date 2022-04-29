@@ -5,6 +5,11 @@ import json
 
 app = Flask(__name__)
 
+def render_table(table, html):
+    table = get_table(table, connect())
+    table = json.dumps(table, default=str)
+    return render_template(html, table=table)
+
 
 @app.route("/")
 def home():
@@ -13,44 +18,42 @@ def home():
 
 @app.route("/tenants")
 def tenants():
-    table = get_table("Tenants", connect())
-    table = json.dumps(table,default=str)
-    return render_template("tenants.html", table=table)
+    return render_table("Tenants", "tenants.html")
 
 
 @app.route("/buildings")
 def buildings():
-    return render_template("buildings.html")
+    return render_table("Buildings", "buildings.html")
 
 
 @app.route("/unittypes")
 def unittypes():
-    return render_template("unittypes.html")
+    return render_table("UnitTypes", "unittypes.html")
 
 
 @app.route("/units")
 def units():
-    return render_template("units.html")
+    return render_table("Units", "units.html")
 
 
 @app.route("/rentedunits")
 def rentedunits():
-    return render_template("rentedunits.html")
+    return render_table("Tenants", "rentedunits.html")
 
 
 @app.route("/payments")
 def payments():
-    return render_template("payments.html")
+    return render_table("Payments, ""payments.html")
 
 
 @app.route("/maintenancerequests")
 def maintenancerequests():
-    return render_template("maintenancerequests.html")
+    return render_table("MaintenanceRequests", "maintenance.html")
 
 
 @app.route("/tenantinformation")
 def tenantinformation():
-    return render_template("tenantinformmation.html")
+    return render_template("tenantinformation.html")
 
 
 app.run("127.0.0.1", 2000)
