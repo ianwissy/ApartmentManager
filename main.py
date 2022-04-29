@@ -53,7 +53,7 @@ def maintenancerequests():
 
 @app.route("/tenantinformation")
 def tenantinformation():
-    return render_template("tenantinformation.html")
+    return render_table("TenantInformation", "tenantinformation.html")
 
 
 app.run("127.0.0.1", 2000)
