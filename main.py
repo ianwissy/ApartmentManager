@@ -38,12 +38,12 @@ def units():
 
 @app.route("/rentedunits")
 def rentedunits():
-    return render_table("Tenants", "rentedunits.html")
+    return render_table("RentedUnits", "rentedunits.html")
 
 
 @app.route("/payments")
 def payments():
-    return render_table("Payments, ""payments.html")
+    return render_table("Payments", "payments.html")
 
 
 @app.route("/maintenancerequests")
