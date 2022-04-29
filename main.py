@@ -46,7 +46,7 @@ def payments():
     return render_table("Payments", "payments.html")
 
 
-@app.route("/maintenancerequests")
+@app.route("/maintenance")
 def maintenancerequests():
     return render_table("MaintenanceRequests", "maintenance.html")
 
