@@ -5,6 +5,7 @@ import json
 
 app = Flask(__name__)
 
+
 def render_table(table, html):
     table = get_table(table, connect())
     table = json.dumps(table, default=str)
