@@ -1,9 +1,17 @@
-<header>
-
-</header>
-<body>
+{% extends 'base.html'%}
+  {% block content %}
+    <h2> Tenants </h2>
     <table id=datatable>
+      <thead>
+        <th>TenantID</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Age</th>
+        <th>PhoneNumber</th>
+        <th>Balance</th>
+      </thead>
     </table>
+    <button> New Row </button>
     <script>
         function makeTable() {
           let data = {{table | safe}}
@@ -15,11 +23,26 @@
               tableCell.innerText = data[row][cell]
               tableRow.appendChild(tableCell)
             }
+            let editCell = document.createElement("td")
+            editCell.innerHTML = "<i class='fa-solid fa-file-pen'></i>"
+            editCell.addEventListener("click", editRow)
+            tableRow.appendChild(editCell)
+            let deleteCell = document.createElement("td");
+            deleteCell.innerHTML = "<i class='fa-solid fa-trash'></i>"
+            deleteCell.addEventListener("click", deleteRow)
+            tableRow.appendChild(deleteCell)
             dataTable.appendChild(tableRow)
           }
         }
 
+        function deleteRow(){
+          console.log("not yet implemented")
+        }
+
+        function editRow(){
+          console.log("not yet implemented")
+        }
 
         makeTable()
     </script>
-</body>
+  {% endblock %}
