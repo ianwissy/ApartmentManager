@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from databaseconnection import connect_to_database as connect, get_table
 import json
 
