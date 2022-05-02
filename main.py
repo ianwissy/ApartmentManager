@@ -22,6 +22,13 @@ def tenants():
     return render_table("Tenants", "tenants.html")
 
 
+@app.route("/tenants/delete/<id_name>/<id>")
+def delete_tenant(id_name, id):
+    delete_row("Tenants", id_name, id)
+    table = get_table("Tenants")
+    return json.dumps(table, default=str)
+
+
 @app.route("/buildings")
 def buildings():
     return render_table("Buildings", "buildings.html")
@@ -40,7 +47,7 @@ def unittypes():
 
 
 @app.route("/unittypes/delete/<id_name>/<id>")
-def delete_building(id_name, id):
+def delete_unit_type(id_name, id):
     delete_row("UnitTypes", id_name, id)
     table = get_table("UnitTypes")
     return json.dumps(table, default=str)
@@ -52,7 +59,7 @@ def units():
 
 
 @app.route("/units/delete/<id_name>/<id>")
-def delete_building(id_name, id):
+def delete_unit(id_name, id):
     delete_row("Units", id_name, id)
     table = get_table("Units")
     return json.dumps(table, default=str)
@@ -64,7 +71,7 @@ def rentedunits():
 
 
 @app.route("/rentedunits/delete/<id_name>/<id>")
-def delete_building(id_name, id):
+def delete_rented_unit(id_name, id):
     delete_row("RentedUnits", id_name, id)
     table = get_table("RentedUnits")
     return json.dumps(table, default=str)
@@ -76,7 +83,7 @@ def payments():
 
 
 @app.route("/payments/delete/<id_name>/<id>")
-def delete_building(id_name, id):
+def delete_payment(id_name, id):
     delete_row("Payments", id_name, id)
     table = get_table("Payments")
     return json.dumps(table, default=str)
@@ -88,7 +95,7 @@ def maintenancerequests():
 
 
 @app.route("/maintenance/delete/<id_name>/<id>")
-def delete_building(id_name, id):
+def delete_maintenance(id_name, id):
     delete_row("MaintenanceRequests", id_name, id)
     table = get_table("MaintenaceRequests")
     return json.dumps(table, default=str)
@@ -100,7 +107,7 @@ def tenantinformation():
 
 
 @app.route("/tenantinformation/delete/<id_name>/<id>")
-def delete_building(id_name, id):
+def delete_tenant_info(id_name, id):
     delete_row("TenantInformation", id_name, id)
     table = get_table("TenantInformation")
     return json.dumps(table, default=str)
