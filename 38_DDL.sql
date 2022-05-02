@@ -71,7 +71,7 @@ CREATE TABLE Units (
   `BuildingID` int(11) NOT NULL,
   `UnitTypeID` int(11) NOT NULL,
   CONSTRAINT FOREIGN KEY (BuildingID) REFERENCES Buildings(BuildingID) ON DELETE CASCADE,
-  CONSTRAINT FOREIGN KEY (UnitTypeID) REFERENCES UnitTypes(UnitTypeID) ON DELETE NO ACTION
+  CONSTRAINT FOREIGN KEY (UnitTypeID) REFERENCES UnitTypes(UnitTypeID) ON DELETE CASCADE
 );
 
 INSERT INTO `Units` (`Price`, `Rented`, `Note`, `BuildingID`, `UnitTypeID`) VALUES
@@ -87,12 +87,12 @@ INSERT INTO `Units` (`Price`, `Rented`, `Note`, `BuildingID`, `UnitTypeID`) VALU
 CREATE TABLE `MaintenanceRequests` (
   `RequestID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `UnitID` int(11) NOT NULL,
-  `TenantID` int(11) NOT NULL,
+  `TenantID` int(11),
   `RequestDate` date NOT NULL,
   `Completed` tinyint(4) NOT NULL,
   `RequestNote` text DEFAULT NULL,
   CONSTRAINT FOREIGN KEY (UnitID) REFERENCES Units(UnitID) ON DELETE CASCADE,
-  CONSTRAINT FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID) ON DELETE NO ACTION
+  CONSTRAINT FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID) ON DELETE SET NULL
 );
 
 INSERT INTO `MaintenanceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Completed`, `RequestNote`) VALUES
@@ -106,10 +106,10 @@ CREATE TABLE `Payments` (
   `PaymentID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `Date` date NOT NULL,
   `Amount` decimal(12,2) NOT NULL,
-  `UnitID` int(11) NOT NULL,
-  `TenantID` int(11) NOT NULL,
-  CONSTRAINT FOREIGN KEY (`UnitID`) REFERENCES Units(`UnitID`) ON DELETE NO ACTION,
-  CONSTRAINT FOREIGN KEY (`TenantID`) REFERENCES Tenants(`TenantID`) ON DELETE NO ACTION
+  `UnitID` int(11),
+  `TenantID` int(11),
+  CONSTRAINT FOREIGN KEY (`UnitID`) REFERENCES Units(`UnitID`) ON DELETE SET NULL,
+  CONSTRAINT FOREIGN KEY (`TenantID`) REFERENCES Tenants(`TenantID`) ON DELETE SET NULL
 );
 
 INSERT INTO `Payments` (`Date`, `Amount`, `UnitID`, `TenantID`) VALUES

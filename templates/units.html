@@ -15,9 +15,14 @@
     </table>
     <button> New Row </button>
     <script>
-        function makeTable() {
-          let data = {{table | safe}}
+
+        let input_data = {{table | safe}}
+
+        function makeTable(data) {
           const dataTable = document.getElementById("datatable");
+          let tableBody = document.createElement("tbody")
+          tableBody.setAttribute("id","tablebody")
+          dataTable.appendChild(tableBody)
           for (let row in data){
             let tableRow = document.createElement("tr");
             for (let cell in data[row]){
@@ -30,21 +35,30 @@
             editCell.addEventListener("click", editRow)
             tableRow.appendChild(editCell)
             let deleteCell = document.createElement("td");
-            deleteCell.innerHTML = "<i class='fa-solid fa-trash'></i>"
-            deleteCell.addEventListener("click", deleteRow)
+            deleteCell.innerHTML = "<i class='fa-solid fa-trash' onclick='deleteRow(event)'></i>"
             tableRow.appendChild(deleteCell)
-            dataTable.appendChild(tableRow)
+            tableBody.appendChild(tableRow)
           }
         }
 
-        function deleteRow(){
-          console.log("not yet implemented")
+        async function deleteRow(event){
+          let row = event.target.parentElement.parentElement
+          let table = event.target.parentElement.parentElement.parentElement.parentElement
+          let id = row.cells[0].innerText
+          let id_name = table.rows[0].cells[0].innerText
+          const response = await fetch(`buildings/delete/${id_name}/${id}`, {method:"GET"})
+          const resp = response.json()
+          .then(resp => {
+            to_delete = document.getElementById("tablebody").remove()
+            makeTable(resp)
+          })
         }
 
         function editRow(){
           console.log("not yet implemented")
         }
 
-        makeTable()
+        makeTable(input_data)
     </script>
+  {% endblock %}
   {% endblock %}

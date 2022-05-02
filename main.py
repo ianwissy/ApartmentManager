@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from databaseconnection import connect_to_database as connect, get_table
+from databaseconnection import *
 import json
 
 
@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 def render_table(table, html):
-    table = get_table(table, connect())
+    table = get_table(table)
     table = json.dumps(table, default=str)
     return render_template(html, table=table)
 
@@ -25,6 +25,13 @@ def tenants():
 @app.route("/buildings")
 def buildings():
     return render_table("Buildings", "buildings.html")
+
+
+@app.route("/buildings/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("Buildings", id_name, id)
+    table = get_table("Buildings")
+    return json.dumps(table, default=str)
 
 
 @app.route("/unittypes")
