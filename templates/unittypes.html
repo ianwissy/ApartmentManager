@@ -42,7 +42,7 @@
           let table = event.target.parentElement.parentElement.parentElement.parentElement
           let id = row.cells[0].innerText
           let id_name = table.rows[0].cells[0].innerText
-          const response = await fetch(`buildings/delete/${id_name}/${id}`, {method:"GET"})
+          const response = await fetch(`unittypes/delete/${id_name}/${id}`, {method:"GET"})
           const resp = response.json()
           .then(resp => {
             to_delete = document.getElementById("tablebody").remove()

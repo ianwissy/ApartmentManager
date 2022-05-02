@@ -39,9 +39,23 @@ def unittypes():
     return render_table("UnitTypes", "unittypes.html")
 
 
+@app.route("/unittypes/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("UnitTypes", id_name, id)
+    table = get_table("UnitTypes")
+    return json.dumps(table, default=str)
+
+
 @app.route("/units")
 def units():
     return render_table("Units", "units.html")
+
+
+@app.route("/units/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("Units", id_name, id)
+    table = get_table("Units")
+    return json.dumps(table, default=str)
 
 
 @app.route("/rentedunits")
@@ -49,9 +63,23 @@ def rentedunits():
     return render_table("RentedUnits", "rentedunits.html")
 
 
+@app.route("/rentedunits/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("RentedUnits", id_name, id)
+    table = get_table("RentedUnits")
+    return json.dumps(table, default=str)
+
+
 @app.route("/payments")
 def payments():
     return render_table("Payments", "payments.html")
+
+
+@app.route("/payments/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("Payments", id_name, id)
+    table = get_table("Payments")
+    return json.dumps(table, default=str)
 
 
 @app.route("/maintenance")
@@ -59,9 +87,23 @@ def maintenancerequests():
     return render_table("MaintenanceRequests", "maintenance.html")
 
 
+@app.route("/maintenance/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("MaintenanceRequests", id_name, id)
+    table = get_table("MaintenaceRequests")
+    return json.dumps(table, default=str)
+
+
 @app.route("/tenantinformation")
 def tenantinformation():
     return render_table("TenantInformation", "tenantinformation.html")
+
+
+@app.route("/tenantinformation/delete/<id_name>/<id>")
+def delete_building(id_name, id):
+    delete_row("TenantInformation", id_name, id)
+    table = get_table("TenantInformation")
+    return json.dumps(table, default=str)
 
 
 @app.route("/tenants/new")
