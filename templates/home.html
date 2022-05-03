@@ -1,0 +1,63 @@
+{% extends 'base.html'%}
+  {% block content %}
+    <h3> Welcome to the Appartment Management Helper </h3>
+    <p>Click on any of the links above to view and edit your appartment's data.</p>
+    <h4> OR </h4>
+    <p>Search for tenant information by name.</p>
+    <div class="inputblock">
+      <div class="inputrow">
+        <label>First Name:</label>
+        <input type="text" id="first_name" value="">
+      </div>
+      <div class="inputrow">
+        <label>Last Name:</label>
+        <input type="text" id="last_name" value="">
+      </div>
+      <div class="inputrow">
+        <button type="button" name="button" onclick="search()">Search</button>
+      </div>
+    </div>
+    <table id=datatable style="visibility:hidden;">
+      <thead>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Unit Type</th>
+        <th>Building</th>
+        <th>Price</th>
+      </thead>
+      <tbody id="tablebody">
+      </tbody>
+    </table>
+    <script>
+
+      async function search() {
+        console.log(document.getElementById("first_name"))
+        first_name = document.getElementById("first_name").value
+        last_name = document.getElementById("last_name").value
+        const response = await fetch(`/search/${first_name}/${last_name}`, {method:"GET"})
+        const resp = response.json()
+        .then(resp => {
+          to_delete = document.getElementById("tablebody").remove()
+          makeTable(resp)
+        })
+      }
+
+      function makeTable(data){
+        const dataTable = document.getElementById("datatable");
+        let tableBody = document.createElement("tbody")
+        tableBody.setAttribute("id","tablebody")
+        dataTable.appendChild(tableBody)
+        for (let row in data){
+          let tableRow = document.createElement("tr");
+          for (let cell in data[row]){
+            let tableCell = document.createElement("td");
+            tableCell.innerText = data[row][cell]
+            tableRow.appendChild(tableCell)
+          }
+          tableBody.appendChild(tableRow)
+        }
+        dataTable.style.visibility = "visible"
+      }
+
+    </script>
+  {% endblock %}

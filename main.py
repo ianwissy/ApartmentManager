@@ -17,6 +17,11 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/search/<first_name>/<last_name>")
+def searching(first_name, last_name):
+    return json.dumps(search(first_name, last_name), default=str)
+
+
 @app.route("/tenants")
 def tenants():
     return render_table("Tenants", "tenants.html")
