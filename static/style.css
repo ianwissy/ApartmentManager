@@ -12,7 +12,19 @@ header{
   margin-bottom: 2%;
 }
 
-h1 {
+a{
+  color: black;
+  font-size: 14pt;
+  text-decoration: none;
+  margin-left:4px;
+  margin-right: 4px;
+
+}
+a:hover{
+  text-decoration: underline;
+}
+
+h1{
   margin: 5px;
   margin-right: 20px;
   font-size: 20pt;
