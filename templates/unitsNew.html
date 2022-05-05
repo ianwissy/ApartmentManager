@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+  {% block content %}
+    <h2> Add New Unit </h2>
+    <table id=datatable>
+      <thead>
+        <th>Price</th>
+        <th>Rented</th>
+        <th>Note</th>
+        <th>BuildingID</th>
+        <th>UnitTypeID</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td class="dropcell"> <select name="buildings" class="dropdown" id="buildings" /> </td>
+          <td class="dropcell"> <select name="buildings" class="dropdown" id="types" /> </td>
+        </tr>
+      </tbody>
+    </table>
+    <button> Add Row </button>
+    <script>
+      let buildingIds = {{buildings | safe}}
+      let typesIds = {{types | safe}}
+
+      function makeDropdown(list, id){
+        dropdown = document.getElementById(id)
+        for (let row of list) {
+          let text = ""
+          for (let cell of row) {
+            text = text + cell + " "
+          }
+          console.log(text)
+          drop = document.createElement("option")
+          drop.setAttribute("value", row[0])
+          drop.innerText = text
+          dropdown.appendChild(drop)
+        }
+      }
+
+      makeDropdown(buildingIds, "buildings")
+      makeDropdown(typesIds, "types")
+    </script>
+  {% endblock %}

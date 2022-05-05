@@ -43,5 +43,27 @@ def search(first_name, last_name):
     return cursor.fetchall()
 
 
+def building_keys():
+    connection = connect_to_database()
+    query = "SELECT BuildingID, BuildingName FROM Buildings"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+def types_keys():
+    connection = connect_to_database()
+    query = "SELECT UnitTypeID, Type FROM UnitTypes"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+def tenants_keys():
+    connection = connect_to_database()
+    query = "SELECT TenantID, FirstName, LastName FROM Tenants"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
 
 

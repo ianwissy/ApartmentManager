@@ -1,0 +1,61 @@
+{% extends 'base.html'%}
+  {% block content %}
+    <h2> Edit Unit Information </h2>
+    <table id=datatable>
+      <thead>
+        <th>Price</th>
+        <th>Rented</th>
+        <th>Note</th>
+        <th>BuildingID</th>
+        <th>UnitTypeID</th>
+      </thead>
+      <tbody>
+        <tr id="editrow">
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td class="dropcell"> <select name="buildings" class="dropdown" id="buildings" /> </td>
+          <td class="dropcell"> <select name="buildings" class="dropdown" id="types" /> </td>
+        </tr>
+      </tbody>
+    </table>
+    <button> Submit </button>
+    <script>
+      let buildingIds = {{buildings | safe}}
+      let typesIds = {{types | safe}}
+      let current = {{current | safe}}
+
+      function init(){
+        const edit_row = document.getElementById("editrow")
+        let i = 1
+        for (let cell of edit_row.cells) {
+          if (cell.className ==! "dropcell"){
+            cell.innerText = current[i]
+          }
+          else {
+            cell.childNodes[1].value = current[i]
+          }
+          i += 1
+        }
+      }
+
+
+      function makeDropdown(list, id){
+        dropdown = document.getElementById(id)
+        for (let row of list) {
+          let text = ""
+          for (let cell of row) {
+            text = text + cell + " "
+          }
+          drop = document.createElement("option")
+          drop.setAttribute("value", row[0])
+          drop.innerText = text
+          dropdown.appendChild(drop)
+        }
+      }
+
+      makeDropdown(buildingIds, "buildings")
+      makeDropdown(typesIds, "types")
+      init()
+    </script>
+  {% endblock %}

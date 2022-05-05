@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from databaseconnection import *
 import json
 
@@ -27,6 +27,12 @@ def tenants():
     return render_table("Tenants", "tenants.html")
 
 
+@app.route("/tenants/update")
+def edit_tenant():
+    current = request.args.get("data")
+    return render_template("tenantsEdit.html", current=current)
+
+
 @app.route("/tenants/delete/<id_name>/<id>")
 def delete_tenant(id_name, id):
     delete_row("Tenants", id_name, id)
@@ -46,9 +52,21 @@ def delete_building(id_name, id):
     return json.dumps(table, default=str)
 
 
+@app.route("/buildings/update")
+def edit_building():
+    current = request.args.get("data")
+    return render_template("buildingsEdit.html", current=current)
+
+
 @app.route("/unittypes")
 def unittypes():
     return render_table("UnitTypes", "unittypes.html")
+
+
+@app.route("/unittypes/update")
+def edit_unit_type():
+    current = request.args.get("data")
+    return render_template("unittypesEdit.html", current=current)
 
 
 @app.route("/unittypes/delete/<id_name>/<id>")
@@ -63,6 +81,14 @@ def units():
     return render_table("Units", "units.html")
 
 
+@app.route("/units/update")
+def edit_unit():
+    current = request.args.get("data")
+    types = json.dumps(types_keys(), default=str)
+    buildings = json.dumps(building_keys(), default=str)
+    return render_template("unitsEdit.html", current=current, buildings=buildings, types=types)
+
+
 @app.route("/units/delete/<id_name>/<id>")
 def delete_unit(id_name, id):
     delete_row("Units", id_name, id)
@@ -73,6 +99,13 @@ def delete_unit(id_name, id):
 @app.route("/rentedunits")
 def rentedunits():
     return render_table("RentedUnits", "rentedunits.html")
+
+
+@app.route("/rentedunits/update")
+def edit_rental():
+    tenants = json.dumps(tenants_keys(), default=str)
+    current = request.args.get("data")
+    return render_template("rentedunitsEdit.html", current=current, tenants=tenants)
 
 
 @app.route("/rentedunits/delete/<id_name>/<id>")
@@ -87,6 +120,13 @@ def payments():
     return render_table("Payments", "payments.html")
 
 
+@app.route("/payments/update")
+def edit_payment():
+    tenants = json.dumps(tenants_keys(), default=str)
+    current = request.args.get("data")
+    return render_template("paymentsEdit.html", current=current, tenants=tenants)
+
+
 @app.route("/payments/delete/<id_name>/<id>")
 def delete_payment(id_name, id):
     delete_row("Payments", id_name, id)
@@ -99,6 +139,13 @@ def maintenancerequests():
     return render_table("MaintenanceRequests", "maintenance.html")
 
 
+@app.route("/maintenance/update")
+def edit_maintenance():
+    current = request.args.get("data")
+    tenants = json.dumps(tenants_keys(), default=str)
+    return render_template("maintenanceEdit.html", current=current, tenants=tenants)
+
+
 @app.route("/maintenance/delete/<id_name>/<id>")
 def delete_maintenance(id_name, id):
     delete_row("MaintenanceRequests", id_name, id)
@@ -109,6 +156,13 @@ def delete_maintenance(id_name, id):
 @app.route("/tenantinformation")
 def tenantinformation():
     return render_table("TenantInformation", "tenantinformation.html")
+
+
+@app.route("/tenantinformation/update")
+def edit_tenantinformation():
+    current = request.args.get("data")
+    tenants = json.dumps(tenants_keys(), default=str)
+    return render_template("tenantinformationEdit.html", current=current, tenants=tenants)
 
 
 @app.route("/tenantinformation/delete/<id_name>/<id>")
@@ -135,27 +189,33 @@ def typesnew():
 
 @app.route("/units/new")
 def unitsnew():
-    return render_template("unitsNew.html")
+    types = json.dumps(types_keys(), default=str)
+    buildings = json.dumps(building_keys(), default=str)
+    return render_template("unitsNew.html", buildings=buildings, types=types)
 
 
 @app.route("/rentedunits/new")
 def rentednew():
-    return render_template("rentedunitsNew.html")
+    tenants = json.dumps(tenants_keys(), default=str)
+    return render_template("rentedunitsNew.html", tenants=tenants)
 
 
 @app.route("/payments/new")
 def paymentsnew():
-    return render_template("paymentsNew.html")
+    tenants = json.dumps(tenants_keys(), default=str)
+    return render_template("paymentsNew.html", tenants=tenants)
 
 
 @app.route("/maintenance/new")
 def maintenancenew():
-    return render_template("maintenanceNew.html")
+    tenants = json.dumps(tenants_keys(), default=str)
+    return render_template("maintenanceNew.html", tenants=tenants)
 
 
 @app.route("/tenantinformation/new")
 def infonew():
-    return render_template("tenantinformationNew.html")
+    tenants = json.dumps(tenants_keys(), default=str)
+    return render_template("tenantinformationNew.html", tenants=tenants)
 
 
 app.run("127.0.0.1", 2000)

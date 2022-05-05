@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+  {% block content %}
+    <h2> Edit Building </h2>
+    <table id=datatable>
+      <thead>
+        <th>BuildingName</th>
+        <th>YTDBuildingRevenue</th>
+      </thead>
+      <tbody>
+        <tr id=editrow>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button> Submit </button>
+    <script>
+    let current = {{current | safe}}
+
+    function init(){
+      const edit_row = document.getElementById("editrow")
+      let i = 1
+      for (let cell of edit_row.cells) {
+        cell.innerText = current[i]
+        i += 1
+      }
+    }
+
+    init()
+
+    </script>
+  {% endblock %}
