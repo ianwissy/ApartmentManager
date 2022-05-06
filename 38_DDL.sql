@@ -66,7 +66,7 @@ INSERT INTO `TenantInformation` (`TenantID`, `SSN`, `CCN`) VALUES
 CREATE TABLE Units (
   `UnitID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `Price` decimal(12,2) NOT NULL,
-  `Rented` tinyint(4) NOT NULL,
+  `Rented` tinyint(1) NOT NULL,
   `Note` text DEFAULT NULL,
   `BuildingID` int(11) NOT NULL,
   `UnitTypeID` int(11) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `MaintenanceRequests` (
   `UnitID` int(11) NOT NULL,
   `TenantID` int(11),
   `RequestDate` date NOT NULL,
-  `Completed` tinyint(4) NOT NULL,
+  `Completed` tinyint(1) NOT NULL,
   `RequestNote` text DEFAULT NULL,
   CONSTRAINT FOREIGN KEY (UnitID) REFERENCES Units(UnitID) ON DELETE CASCADE,
   CONSTRAINT FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID) ON DELETE SET NULL
