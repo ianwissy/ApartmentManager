@@ -2,22 +2,36 @@
 {% block content %}
 <h2> Maintenance Requests </h2>
 <body>
-    <table id=datatable>
-      <thead>
-        <th>RequestID</th>
-        <th>Apt Num</th>
-        <th>Building</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Request Date</th>
-        <th>Completed</th>
-        <th>Request Note</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </thead>
-    </table>
-    <button onclick="location.href='./maintenance/new'"> New Row </button>
-    <script>
+  <div class="inputblock">
+    <p> Filter by request date </p>
+    <div class="inputrow">
+      <label>Start Date:</label>
+      <input type="date" id="start_date" value="">
+      <label>End Date:</label>
+      <input type="date" id="end_date" value="">
+    </div>
+    <div class="inputrow">
+      <button type="button" name="button" onclick="filter()">Filter</button>
+      <span>  </span>
+      <button type="button" name="button" onclick="filter(1)">Reset Filter</button>
+    </div>
+  </div>
+  <table id=datatable>
+    <thead>
+      <th>RequestID</th>
+      <th>Apt Num</th>
+      <th>Building</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Request Date</th>
+      <th>Completed</th>
+      <th>Request Note</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </thead>
+  </table>
+  <button onclick="location.href='./maintenance/new'"> New Row </button>
+  <script>
 
         let input_data = {{table | safe}}
 
@@ -61,6 +75,27 @@
           location.href = "/maintenance/update?data=" + id
         }
 
+        async function filter(reset=0) {
+          if (reset === 1) {
+            start_date = "0000-01-01"
+            end_date = "9999-01-01"
+            document.getElementById("start_date").value = ""
+            document.getElementById("end_date").value = ""
+          }
+          else {
+            start_date = document.getElementById("start_date").value
+            end_date = document.getElementById("end_date").value
+          }
+          if (start_date !== "" && end_date !== ""){
+            const response = await fetch(`maintenance/filter/${start_date}/${end_date}`, {method:"GET"})
+            const resp = response.json()
+            .then(resp => {
+              document.getElementById("tablebody").remove()
+              makeTable(resp)
+            })
+          }
+        }
+
         makeTable(input_data)
-    </script>
-  {% endblock %}
+  </script>
+{% endblock %}

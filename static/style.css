@@ -44,30 +44,44 @@ h4{
 p{
   text-align: center;
   font-size: 18pt;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .inputblock{
   display:flex;
   flex-direction: column;
+  margin-bottom: 15px;
+  margin-top: -10px;
 }
 
 .inputrow{
-  display:block;
+  display:flex;
+  flex-direction: row;
   margin-left: auto;
   margin-right: auto;
 }
 
 button{
-  margin: 3px;
+  margin-top: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
   margin-bottom: 10px;
+  display: inline-block;
+}
+
+span{
+  margin-left: 4px;
 }
 
 input{
   display: inline-block;
+  margin-left: 3px;
 }
 
 label{
   display: inline-block;
+  margin-left: 6px;
 }
 
 #content{

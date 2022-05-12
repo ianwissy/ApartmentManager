@@ -1,6 +1,20 @@
 {% extends 'base.html'%}
   {% block content %}
     <h2> Payments </h2>
+    <div class="inputblock">
+      <p> Filter by payment date </p>
+      <div class="inputrow">
+        <label>Start Date:</label>
+        <input type="date" id="start_date" value="">
+        <label>End Date:</label>
+        <input type="date" id="end_date" value="">
+      </div>
+      <div class="inputrow">
+        <button type="button" name="button" onclick="filter()">Filter</button>
+        <span>  </span>
+        <button type="button" name="button" onclick="filter(1)">Reset Filter</button>
+      </div>
+    </div>
     <table id=datatable>
       <thead>
         <th>PaymentID</th>
@@ -14,7 +28,7 @@
         <th>Delete</th>
       </thead>
     </table>
-    <button onclick="location.href='./payments/new'"> New Row </button>
+    <button onclick="location.href='./payments/new'"> New Row </button>=
     <script>
 
         let input_data = {{table | safe}}
@@ -58,6 +72,29 @@
           let id = event.target.parentElement.parentElement.cells[0].innerText
           location.href = "/payments/update?data=" + id
         }
+
+        async function filter(reset=0) {
+          if (reset === 1) {
+            start_date = "0000-01-01"
+            end_date = "9999-01-01"
+            document.getElementById("start_date").value = ""
+            document.getElementById("end_date").value = ""
+          }
+          else {
+            start_date = document.getElementById("start_date").value
+            end_date = document.getElementById("end_date").value
+          }
+          if (start_date !== "" && end_date !== ""){
+            const response = await fetch(`payments/filter/${start_date}/${end_date}`, {method:"GET"})
+            const resp = response.json()
+            .then(resp => {
+              document.getElementById("tablebody").remove()
+              makeTable(resp)
+            })
+          }
+        }
+
+
 
         makeTable(input_data)
     </script>

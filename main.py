@@ -264,6 +264,17 @@ def payments():
         return "/payments"
 
 
+@app.route("/payments/filter/<start_date>/<end_date>")
+def payment_filtering(start_date, end_date):
+    filtered = get_query("SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM \
+            Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
+            INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
+            RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID \
+            LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID \
+            WHERE Date between '" + start_date + "' AND '" + end_date + "';")
+    return json.dumps(filtered, default=str)
+
+
 @app.route("/payments/new")
 def paymentsnew():
     tenants = json.dumps(tenants_keys(), default=str)
@@ -316,6 +327,17 @@ def maintenancerequests():
                 " '" + request.json['values'][2] + "', " + request.json['values'][3] + ", '" + request.json['values'][4] + "');"
         send_query(query)
         return "/maintenance"
+
+
+@app.route("/maintenance/filter/<start_date>/<end_date>")
+def maintenance_filtering(start_date, end_date):
+    filtered = get_query("SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM \
+                Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
+                INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
+                INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID \
+                LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID \
+                WHERE RequestDate between '" + start_date + "' AND '" + end_date + "';")
+    return json.dumps(filtered, default=str)
 
 
 @app.route("/maintenance/new")
