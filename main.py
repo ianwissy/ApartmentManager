@@ -396,7 +396,6 @@ def infonew():
     return render_template("tenantinformationNew.html", tenants=tenants)
 
 
-
 @app.route("/tenantinformation/update")
 def edit_tenantinformation():
     tenants = json.dumps(tenants_keys(), default=str)
