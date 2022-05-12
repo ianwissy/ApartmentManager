@@ -8,14 +8,14 @@
         <th>CCN</th>
       </thead>
       <tbody>
-        <tr>
+        <tr id="newrow">
           <td class="dropcell"> <select name="tenants" class="dropdown" id="tenants" /> </td>
           <td contenteditable="true"></td>
           <td contenteditable="true"></td>
         </tr>
       </tbody>
     </table>
-    <button> Add Row </button>
+    <button onclick="addRow()"> Add Row </button>
     <script>
       let tenantIds = {{tenants | safe}}
 
@@ -31,6 +31,40 @@
           drop.innerText = text
           dropdown.appendChild(drop)
         }
+      }
+
+      function addRow(){
+        const row = document.getElementById("newrow")
+        let i = 0
+        let values = []
+        for (let cell of row.cells) {
+          if (cell.className === "dropcell" || cell.className === "datecell"){
+            values.push(cell.childNodes[1].value)
+          }
+          else {
+            console.log(cell.innerText)
+            if (cell.innerText === "") {
+              values.push("NULL")
+            }
+            else {
+              values.push(cell.innerText)
+            }
+          }
+          i += 1
+        }
+        console.log(values)
+        addToDatabase(values)
+      }
+
+      async function addToDatabase(values) {
+        resp = await fetch("/tenantinformation", {
+          method:"POST",
+          headers:{'Content-Type': 'application/json' },
+          body: JSON.stringify({values})
+        })
+        .then((resp) => {
+          location.href = resp.url
+        })
       }
 
       makeDropdown(tenantIds, "tenants")

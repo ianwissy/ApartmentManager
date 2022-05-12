@@ -55,18 +55,20 @@ SELECT TenantID, FirstName, LastName FROM Tenants;
 -- 4. Units 
 
 -- populate Units table
-SELECT * from Units;
+SELECT UnitId, AptNum, Price, Rented, Note, BuildingName, Type FROM Units
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID;
 
 -- insert into Units
-INSERT INTO Units (Price, Rented, Note, BuildingID, UnitTypeID) VALUES
-(:priceInput, :rentedInput, :noteInput, :bidInput, :uidInput);
+INSERT INTO Units (AptNum, Price, Rented, Note, BuildingID, UnitTypeID) VALUES
+(:AptNumInput, :priceInput, :rentedInput, :noteInput, :bidInput, :uidInput);
 
 -- delete a Unit
 DELETE FROM Units WHERE UnitID=:ID;
 
 -- edit a Unit
 UPDATE Units
-SET Price=:priceInput, Rented=:rentedInput, Note=:noteInput, BuildingID=:bidInput, UnitTypeID=:uidInput
+SET AptNum=AptNumInput, Price=:priceInput, Rented=:rentedInput, Note=:noteInput, BuildingID=:bidInput, UnitTypeID=:uidInput
 WHERE TenantID=:ID;
 
 -- 5. Unit Types
@@ -92,7 +94,11 @@ SELECT UnitTypeID, TYPE FROM UnitTypes;
 -- 6. Payments
 
 -- populate Payments table
-SELECT * from Payments;
+SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM Units
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
+INNER JOIN Payments ON Units.UnitID=Payments.UnitID 
+INNER JOIN Tenants ON Payments.TenantID=Tenants.TenantID;
 
 -- insert into Payments
 INSERT INTO `Payments` (`Date`, `Amount`, `UnitID`, `TenantID`) VALUES
@@ -109,7 +115,11 @@ WHERE PaymentID=:ID;
 -- 7. Rented Units
 
 -- populate Rented Units table
-SELECT * from RentedUnits;
+SELECT RentalID, AptNum, BuildingName, Type, FirstName, LastName, StartDate FROM Units
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
+INNER JOIN RentedUnits ON Units.UnitID=RentedUnits.UnitID 
+INNER JOIN Tenants ON RentedUnits.TenantID=Tenants.TenantID;
 
 -- insert into RentedUnits
 INSERT INTO `RentedUnits` (`UnitID`, `TenantID`, `StartDate`) VALUES
@@ -126,7 +136,11 @@ WHERE RentalID=:ID;
 -- 8. Maintenance Requests
 
 -- populate Maintenance table
-SELECT * from MaintenanceRequests;
+SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM Units
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
+INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID 
+INNER JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID;
 
 -- insert into MaintenanceRequests
 INSERT INTO `MaintenenceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Completed`, `RequestNote`) VALUES
@@ -143,7 +157,8 @@ WHERE RequestID=:ID;
 -- 9. Tenant Information
 
 -- populate Tenant Information table
-SELECT * from MaintenanceRequests;
+SELECT Tenants.TenantID, FirstName, LastName, SSN, CCN FROM Tenants
+INNER JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID;
 
 -- insert into MaintenanceRequests
 INSERT INTO `TenantInformation` (`TenantID`, `SSN`, `CCN`)
@@ -155,5 +170,5 @@ DELETE FROM TenantInformation WHERE TenantID=:ID;
 
 -- edit Tenant Information
 UPDATE TenantInformation
-SET TenantID=:tidInput, SSN=:ssnInput, CCN=:ccnInput
-WHERE RequestID=:ID;
+SET SSN=:ssnInput, CCN=:ccnInput
+WHERE TenantID=:ID;

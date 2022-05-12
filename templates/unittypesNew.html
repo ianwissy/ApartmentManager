@@ -6,12 +6,37 @@
         <th>Type</th>
       </thead>
       <tbody>
-        <tr>
+        <tr id="newrow">
           <td contenteditable="true"></td>
         </tr>
       </tbody>
     </table>
-    <button> Add Row </button>
+    <button onclick="addRow()"> Add Row </button>
     <script>
+
+      function addRow(){
+        const row = document.getElementById("newrow")
+        let i = 0
+        let values = []
+        for (let cell of row.cells) {
+          if (cell.className === "dropcell" || cell.className === "datecell"){
+            values.push(cell.childNodes[1].value)
+          }
+          else {values.push(cell.innerText)}
+          i += 1
+        }
+        addToDatabase(values)
+      }
+
+      async function addToDatabase(values) {
+        resp = await fetch("/unittypes", {
+          method:"POST",
+          headers:{'Content-Type': 'application/json' },
+          body: JSON.stringify({values})
+        })
+        .then((resp) => {
+          location.href = resp.url
+        })
+      }
     </script>
   {% endblock %}

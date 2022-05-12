@@ -3,7 +3,7 @@ SET AUTOCOMMIT = 0;
 
 -- --------------------------------------------------------
 
-CREATE TABLE `Buildings` (
+CREATE OR REPLACE TABLE `Buildings` (
   `BuildingID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `BuildingName` varchar(45) DEFAULT NULL,
   `YTDBuildingRevenue` decimal(12,2) DEFAULT NULL
@@ -16,7 +16,7 @@ INSERT INTO `Buildings` (`BuildingName`, `YTDBuildingRevenue`) VALUES
 
 -- --------------------------------------------------------
 
-CREATE TABLE `Tenants` (
+CREATE OR REPLACE TABLE `Tenants` (
   `TenantID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `FirstName` varchar(45) NOT NULL,
   `LastName` varchar(45) NOT NULL,
@@ -34,7 +34,7 @@ INSERT INTO `Tenants` (`FirstName`, `LastName`, `Age`, `PhoneNumber`, `Balance`)
 
 -- --------------------------------------------------------
 
-CREATE TABLE `UnitTypes` (
+CREATE OR REPLACE TABLE `UnitTypes` (
   `UnitTypeID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `Type` varchar(45) NOT NULL
 );
@@ -48,7 +48,7 @@ INSERT INTO `UnitTypes` (`Type`) VALUES
 
 -- --------------------------------------------------------
 
-CREATE TABLE `TenantInformation` (
+CREATE OR REPLACE TABLE `TenantInformation` (
   `TenantID` int(11) NOT NULL PRIMARY KEY,
   `SSN` int(9) DEFAULT NULL,
   `CCN` bigint(16) DEFAULT NULL,
@@ -63,8 +63,9 @@ INSERT INTO `TenantInformation` (`TenantID`, `SSN`, `CCN`) VALUES
 
 -- --------------------------------------------------------
 
-CREATE TABLE Units (
+CREATE OR REPLACE TABLE Units (
   `UnitID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `AptNum` varchar(8) NOT NULL,
   `Price` decimal(12,2) NOT NULL,
   `Rented` tinyint(1) NOT NULL,
   `Note` text DEFAULT NULL,
@@ -74,17 +75,17 @@ CREATE TABLE Units (
   CONSTRAINT FOREIGN KEY (UnitTypeID) REFERENCES UnitTypes(UnitTypeID) ON DELETE CASCADE
 );
 
-INSERT INTO `Units` (`Price`, `Rented`, `Note`, `BuildingID`, `UnitTypeID`) VALUES
-('1600.34', 1, '4th floor corner', 1, 1),
-('1950.34', 0, '1st floor center no view', 1, 2),
-('2400.00', 0, NULL, 2, 3),
-('500.35', 1, NULL, 2, 5),
-('2140.00', 1, NULL, 3, 2),
-('800.00', 1, NULL, 3, 4);
+INSERT INTO `Units` (`AptNum`, `Price`, `Rented`, `Note`, `BuildingID`, `UnitTypeID`) VALUES
+('406', '1600.34', 1, '4th floor corner', 1, 1),
+('112', '1950.34', 0, '1st floor center no view', 1, 2),
+('208', '2400.00', 0, NULL, 2, 3),
+('06S', '500.35', 1, NULL, 2, 5),
+('302', '2140.00', 1, NULL, 3, 2),
+('02G', '800.00', 1, NULL, 3, 4);
 
 -- --------------------------------------------------------
 
-CREATE TABLE `MaintenanceRequests` (
+CREATE OR REPLACE TABLE `MaintenanceRequests` (
   `RequestID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `UnitID` int(11) NOT NULL,
   `TenantID` int(11),
@@ -102,7 +103,7 @@ INSERT INTO `MaintenanceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Complet
 
 -- --------------------------------------------------------
 
-CREATE TABLE `Payments` (
+CREATE OR REPLACE TABLE `Payments` (
   `PaymentID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `Date` date NOT NULL,
   `Amount` decimal(12,2) NOT NULL,
@@ -120,7 +121,7 @@ INSERT INTO `Payments` (`Date`, `Amount`, `UnitID`, `TenantID`) VALUES
 
 -- --------------------------------------------------------
 
-CREATE TABLE `RentedUnits` (
+CREATE OR REPLACE TABLE `RentedUnits` (
   `RentalID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `UnitID` int(11) NOT NULL,
   `TenantID` int(11) NOT NULL,
@@ -137,8 +138,6 @@ INSERT INTO `RentedUnits` (`UnitID`, `TenantID`, `StartDate`) VALUES
 (3, 3, '2020-02-01');
 
 -- --------------------------------------------------------
-  
+
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
-
-

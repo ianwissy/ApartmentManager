@@ -15,7 +15,7 @@
         </tr>
       </tbody>
     </table>
-    <button> Submit </button>
+    <button onclick="makeRow()"> Submit </button>
     <script>
       let tenantIds = {{tenants | safe}}
       let current = {{current | safe}}
@@ -34,6 +34,37 @@
         }
       }
 
+      function makeRow(){
+        const row = document.getElementById("editrow")
+        let i = 0
+        let values = []
+        for (let cell of row.cells) {
+          if (cell.className === "dropcell" || cell.className === "datecell"){
+            values.push(cell.childNodes[1].value)
+          }
+          else {
+            if (cell.innerText == "") {
+              values.push("null")
+            }
+            else {
+              values.push(cell.innerText)
+            }
+          }
+          i += 1
+        }
+        sendToDatabase(values)
+      }
+
+      async function sendToDatabase(values) {
+        resp = await fetch("/tenantinformation", {
+          method:"PUT",
+          headers:{'Content-Type': 'application/json' },
+          body: JSON.stringify({values})
+        })
+        .then((resp) => {
+          location.href = resp.url
+        })
+      }
 
       function makeDropdown(list, id){
         dropdown = document.getElementById(id)

@@ -107,7 +107,17 @@ tr:nth-child(even) {
   font-size: 100%;
   width: 100%;
   min-height: 100%;
-  line-height: 100%
+}
+
+.datecell{
+  padding: 0;
+  margin: 0;
+}
+
+.datepicker {
+  width: 98.5%;
+  min-height: 100%;
+  margin: 0;
 }
 
 button{

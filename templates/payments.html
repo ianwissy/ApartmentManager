@@ -6,8 +6,10 @@
         <th>PaymentID</th>
         <th>Date</th>
         <th>Amount</th>
-        <th>UnitID</th>
-        <th>TenantID</th>
+        <th>Apartment Number</th>
+        <th>Building</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Edit</th>
         <th>Delete</th>
       </thead>
@@ -47,19 +49,14 @@
           const response = await fetch(`payments/delete/${id_name}/${id}`, {method:"GET"})
           const resp = response.json()
           .then(resp => {
-            to_delete = document.getElementById("tablebody").remove()
+            document.getElementById("tablebody").remove()
             makeTable(resp)
           })
         }
 
         function editRow(){
-          let row = event.target.parentElement.parentElement
-          let row_list = []
-          for (let cell of row.cells) {
-            row_list.push(cell.innerText)
-          }
-          row_list = JSON.stringify(row_list.slice(0,-2))
-          location.href = "/payments/update?data=" + row_list
+          let id = event.target.parentElement.parentElement.cells[0].innerText
+          location.href = "/payments/update?data=" + id
         }
 
         makeTable(input_data)

@@ -4,8 +4,8 @@
     <table id=datatable>
       <thead>
         <th>BuildingID</th>
-        <th>BuildingName</th>
-        <th>YTDBuildingRevenue</th>
+        <th>Building Name</th>
+        <th>YTD Building Revenue</th>
         <th>Edit</th>
         <th>Delete</th>
       </thead>
@@ -45,19 +45,14 @@
           const response = await fetch(`buildings/delete/${id_name}/${id}`, {method:"GET"})
           const resp = response.json()
           .then(resp => {
-            to_delete = document.getElementById("tablebody").remove()
+            document.getElementById("tablebody").remove()
             makeTable(resp)
           })
         }
 
         function editRow(event){
-          let row = event.target.parentElement.parentElement
-          let row_list = []
-          for (let cell of row.cells) {
-            row_list.push(cell.innerText)
-          }
-          row_list = JSON.stringify(row_list.slice(0,-2))
-          location.href = "/buildings/update?data=" + row_list
+          let id = event.target.parentElement.parentElement.cells[0].innerText
+          location.href = "/buildings/update?data=" + id
         }
 
         makeTable(input_data)

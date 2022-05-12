@@ -8,16 +8,17 @@
         <th>StartDate</th>
       </thead>
       <tbody>
-        <tr>
-          <td contenteditable="true"></td>
+        <tr id="newrow">
+          <td class="dropcell"> <select name="units" class="dropdown" id="units" /> </td>
           <td class="dropcell"> <select name="tenants" class="dropdown" id="tenants" /> </td>
-          <td contenteditable="true"></td>
+          <td class="datecell"> <input type="date" id="start" class="datepicker"/> </td>
         </tr>
       </tbody>
     </table>
-    <button> Add Row </button>
+    <button onclick="addRow()"> Add Row </button>
     <script>
       let tenantIds = {{tenants | safe}}
+      let unitIds = {{units | safe}}
 
       function makeDropdown(list, id){
         dropdown = document.getElementById(id)
@@ -33,6 +34,32 @@
         }
       }
 
+      function addRow(){
+        const row = document.getElementById("newrow")
+        let i = 0
+        let values = []
+        for (let cell of row.cells) {
+          if (cell.className === "dropcell" || cell.className === "datecell"){
+            values.push(cell.childNodes[1].value)
+          }
+          else {values.push(cell.innerText)}
+          i += 1
+        }
+        addToDatabase(values)
+      }
+
+      async function addToDatabase(values) {
+        resp = await fetch("/rentedunits", {
+          method:"POST",
+          headers:{'Content-Type': 'application/json' },
+          body: JSON.stringify({values})
+        })
+        .then((resp) => {
+          location.href = resp.url
+        })
+      }
+
+      makeDropdown(unitIds, "units")
       makeDropdown(tenantIds, "tenants")
     </script>
   {% endblock %}
