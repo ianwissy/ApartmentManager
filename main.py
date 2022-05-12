@@ -189,10 +189,10 @@ def delete_unit(id_name, id):
 def rentedunits():
     if request.method == "GET":
         query = "SELECT RentalID, AptNum, BuildingName, Type, FirstName, LastName, StartDate FROM \
-                    Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
-                    INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
-                    INNER JOIN RentedUnits ON Units.UnitID=RentedUnits.UnitID \
-                    INNER JOIN Tenants ON RentedUnits.TenantID=Tenants.TenantID"
+                Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
+                INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
+                INNER JOIN RentedUnits ON Units.UnitID=RentedUnits.UnitID \
+                INNER JOIN Tenants ON RentedUnits.TenantID=Tenants.TenantID"
         table = get_query(query)
         table = json.dumps(table, default=str)
         return render_template("rentedunits.html", table=table)
@@ -243,16 +243,17 @@ def payments():
         query = "SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM \
             Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
             INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
-            INNER JOIN Payments ON Units.UnitID=Payments.UnitID \
-            INNER JOIN Tenants ON Payments.TenantID=Tenants.TenantID"
+            RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID \
+            LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID"
         table = get_query(query)
         table = json.dumps(table, default=str)
         return render_template("payments.html", table=table)
     elif request.method == "PUT":
         query = "UPDATE Payments " \
             "SET Date='" + request.json['values'][1] + "', Amount=" + request.json['values'][2] + "" \
-                    ", UnitID=" + request.json['values'][3] + ", TenantID=" + request.json['values'][4] + " " \
-                    "WHERE PaymentID=" + request.json['values'][0] + ";"
+            ", UnitID=" + request.json['values'][3] + ", TenantID=" + request.json['values'][4] + " " \
+            "WHERE PaymentID=" + request.json['values'][0] + ";"
+        print(query)
         send_query(query)
         return "/payments"
     elif request.method == "POST":
@@ -284,10 +285,10 @@ def edit_payment():
 def delete_payment(id_name, id):
     delete_row("Payments", id_name, id)
     table = get_query("SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM \
-                        Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
-                        INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
-                        INNER JOIN Payments ON Units.UnitID=Payments.UnitID \
-                        INNER JOIN Tenants ON Payments.TenantID=Tenants.TenantID")
+            Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
+            INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
+            RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID \
+            LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID")
     return json.dumps(table, default=str)
 
 
@@ -295,10 +296,10 @@ def delete_payment(id_name, id):
 def maintenancerequests():
     if request.method == "GET":
         query = "SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM \
-                            Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
-                            INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
-                            INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID \
-                            INNER JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID"
+                Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
+                INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
+                INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID \
+                LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID"
         table = get_query(query)
         table = json.dumps(table, default=str)
         return render_template("maintenance.html", table=table)
@@ -338,10 +339,10 @@ def edit_maintenance():
 def delete_maintenance(id_name, id):
     delete_row("MaintenanceRequests", id_name, id)
     table = get_query("SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM \
-                            Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
-                            INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
-                            INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID \
-                            INNER JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID")
+                    Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
+                    INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID \
+                    INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID \
+                    LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID")
     return json.dumps(table, default=str)
 
 

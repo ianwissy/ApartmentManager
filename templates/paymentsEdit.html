@@ -39,7 +39,7 @@
         }
       }
 
-      function makeDropdown(list, id){
+      function makeDropdown(list, id, nullable){
         dropdown = document.getElementById(id)
         for (let row of list) {
           let text = ""
@@ -49,6 +49,12 @@
           drop = document.createElement("option")
           drop.setAttribute("value", row[0])
           drop.innerText = text
+          dropdown.appendChild(drop)
+        }
+        if (nullable === 1){
+          drop = document.createElement("option")
+          drop.setAttribute("value", "NULL")
+          drop.innerText = "None"
           dropdown.appendChild(drop)
         }
       }
@@ -63,7 +69,7 @@
           }
           else {
             if (cell.innerText == "") {
-              values.push("null")
+              values.push("NULL")
             }
             else {
               values.push(cell.innerText)
@@ -85,8 +91,8 @@
         })
       }
 
-      makeDropdown(unitIds, "units")
-      makeDropdown(tenantIds, "tenants")
+      makeDropdown(unitIds, "units", 1)
+      makeDropdown(tenantIds, "tenants", 0)
       init()
     </script>
   {% endblock %}

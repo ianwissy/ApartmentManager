@@ -97,8 +97,8 @@ SELECT UnitTypeID, TYPE FROM UnitTypes;
 SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM Units
 INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
-INNER JOIN Payments ON Units.UnitID=Payments.UnitID 
-INNER JOIN Tenants ON Payments.TenantID=Tenants.TenantID;
+RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID
+LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID;
 
 -- insert into Payments
 INSERT INTO `Payments` (`Date`, `Amount`, `UnitID`, `TenantID`) VALUES
@@ -140,7 +140,7 @@ SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Comple
 INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
 INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID 
-INNER JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID;
+LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID;
 
 -- insert into MaintenanceRequests
 INSERT INTO `MaintenenceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Completed`, `RequestNote`) VALUES

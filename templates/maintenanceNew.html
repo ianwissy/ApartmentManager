@@ -24,7 +24,7 @@
       let tenantIds = {{tenants | safe}}
       let unitIds = {{units | safe}}
 
-      function makeDropdown(list, id){
+      function makeDropdown(list, id, nullable){
         dropdown = document.getElementById(id)
         for (let row of list) {
           let text = ""
@@ -34,6 +34,12 @@
           drop = document.createElement("option")
           drop.setAttribute("value", row[0])
           drop.innerText = text
+          dropdown.appendChild(drop)
+        }
+        if (nullable === 1){
+          drop = document.createElement("option")
+          drop.setAttribute("value", "NULL")
+          drop.innerText = "None"
           dropdown.appendChild(drop)
         }
       }
@@ -63,7 +69,7 @@
         })
       }
 
-      makeDropdown(unitIds, "units")
-      makeDropdown(tenantIds, "tenants")
+      makeDropdown(unitIds, "units", 0)
+      makeDropdown(tenantIds, "tenants", 1)
     </script>
   {% endblock %}
