@@ -143,7 +143,7 @@ INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID
 LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID;
 
 -- insert into MaintenanceRequests
-INSERT INTO `MaintenenceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Completed`, `RequestNote`) VALUES
+INSERT INTO `MaintenanceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Completed`, `RequestNote`) VALUES
 (:uidInput, :tidInput, :rdateInput, :completedInput, :rnoteInput);
 
 -- delete a MaintenanceRequest
@@ -165,7 +165,7 @@ INSERT INTO `TenantInformation` (`TenantID`, `SSN`, `CCN`)
 VALUES (:tidInput, :ssnInput, :ccnInput);
 
 
--- delete Tenant Informaiton
+-- delete Tenant Information
 DELETE FROM TenantInformation WHERE TenantID=:ID;
 
 -- edit Tenant Information
