@@ -100,6 +100,14 @@ INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID
 RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID
 LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID;
 
+-- filter Payments data by payment date
+SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM 
+Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
+RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID 
+LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID 
+WHERE Date BETWEEN :start_date AND :end_date;
+
 -- insert into Payments
 INSERT INTO `Payments` (`Date`, `Amount`, `UnitID`, `TenantID`) VALUES
 (:dateInput, :amountInput, :uidInput, :tidInput);
@@ -141,6 +149,14 @@ INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
 INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID 
 LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID;
+
+-- filter Maintenance data by date
+SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM 
+Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
+INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID 
+LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID 
+WHERE RequestDate BETWEEN :start_date AND :end_date;
 
 -- insert into MaintenanceRequests
 INSERT INTO `MaintenanceRequests` (`UnitID`, `TenantID`, `RequestDate`, `Completed`, `RequestNote`) VALUES
