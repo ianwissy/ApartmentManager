@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'newbase.html'%}
   {% block content %}
     <h2> Add New Tenant </h2>
     <table id=datatable>
@@ -20,37 +20,7 @@
       </tbody>
     </table>
     <button onclick="addRow()"> Add Row </button>
-    <script>
-      function addRow(){
-        const row = document.getElementById("newrow")
-        let i = 0
-        let values = []
-        for (let cell of row.cells) {
-          if (cell.className === "dropcell" || cell.className === "datecell"){
-            values.push(cell.childNodes[1].value)
-          }
-          else {
-            if (cell.innerText == "") {
-              values.push("null")
-            }
-            else {
-              values.push(cell.innerText)
-            }
-          }
-          i += 1
-        }
-        addToDatabase(values)
-      }
-
-      async function addToDatabase(values) {
-        resp = await fetch("/tenants", {
-          method:"POST",
-          headers:{'Content-Type': 'application/json' },
-          body: JSON.stringify({values})
-        })
-        .then((resp) => {
-          location.href = resp.url
-        })
-      }
-    </script>
+  {% endblock %}
+  {% block script %}
+      const tablename = "tenants"
   {% endblock %}

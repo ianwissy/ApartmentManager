@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'tablebase.html'%}
 {% block content %}
 <h2> Maintenance Requests </h2>
 <body>
@@ -31,71 +31,30 @@
     </thead>
   </table>
   <button onclick="location.href='./maintenance/new'"> New Row </button>
-  <script>
+  {% endblock %}
+  {% block script %}
+    async function filter(reset=0) {
+      if (reset === 1) {
+        start_date = "0000-01-01"
+        end_date = "9999-01-01"
+        document.getElementById("start_date").value = ""
+        document.getElementById("end_date").value = ""
+      }
+      else {
+        start_date = document.getElementById("start_date").value
+        end_date = document.getElementById("end_date").value
+      }
+      if (start_date !== "" && end_date !== ""){
+        const response = await fetch(`maintenance/filter/${start_date}/${end_date}`, {method:"GET"})
+        const resp = response.json()
+        .then(resp => {
+          document.getElementById("tablebody").remove()
+          makeTable(resp)
+        })
+      }
+    }
 
-        let input_data = {{table | safe}}
-
-        function makeTable(data) {
-          const dataTable = document.getElementById("datatable");
-          let tableBody = document.createElement("tbody")
-          tableBody.setAttribute("id","tablebody")
-          dataTable.appendChild(tableBody)
-          for (let row in data){
-            let tableRow = document.createElement("tr");
-            for (let cell in data[row]){
-              let tableCell = document.createElement("td");
-              tableCell.innerText = data[row][cell]
-              tableRow.appendChild(tableCell)
-            }
-            let editCell = document.createElement("td")
-            editCell.innerHTML = "<i class='fa-solid fa-file-pen' onclick='editRow(event)'></i>"
-            tableRow.appendChild(editCell)
-            let deleteCell = document.createElement("td");
-            deleteCell.innerHTML = "<i class='fa-solid fa-trash' onclick='deleteRow(event)'></i>"
-            tableRow.appendChild(deleteCell)
-            tableBody.appendChild(tableRow)
-          }
-        }
-
-        async function deleteRow(event){
-          let row = event.target.parentElement.parentElement
-          let table = event.target.parentElement.parentElement.parentElement.parentElement
-          let id = row.cells[0].innerText
-          let id_name = table.rows[0].cells[0].innerText
-          const response = await fetch(`maintenance/delete/${id_name}/${id}`, {method:"GET"})
-          const resp = response.json()
-          .then(resp => {
-            document.getElementById("tablebody").remove()
-            makeTable(resp)
-          })
-        }
-
-        function editRow(){
-          let id = event.target.parentElement.parentElement.cells[0].innerText
-          location.href = "/maintenance/update?data=" + id
-        }
-
-        async function filter(reset=0) {
-          if (reset === 1) {
-            start_date = "0000-01-01"
-            end_date = "9999-01-01"
-            document.getElementById("start_date").value = ""
-            document.getElementById("end_date").value = ""
-          }
-          else {
-            start_date = document.getElementById("start_date").value
-            end_date = document.getElementById("end_date").value
-          }
-          if (start_date !== "" && end_date !== ""){
-            const response = await fetch(`maintenance/filter/${start_date}/${end_date}`, {method:"GET"})
-            const resp = response.json()
-            .then(resp => {
-              document.getElementById("tablebody").remove()
-              makeTable(resp)
-            })
-          }
-        }
-
-        makeTable(input_data)
-  </script>
+  const tablename = "maintenance"
+  let input_data = {{table | safe}}
+  makeTable(input_data)
 {% endblock %}

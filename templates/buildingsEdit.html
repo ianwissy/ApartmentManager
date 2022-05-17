@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'editbase.html'%}
   {% block content %}
     <h2> Edit Building </h2>
     <table id=datatable>
@@ -16,44 +16,9 @@
       </tbody>
     </table>
     <button onclick="makeRow()"> Submit </button>
-    <script>
+  {% endblock %}
+  {% block script %}
     let current = {{current | safe}}
-
-    function init(){
-      const edit_row = document.getElementById("editrow")
-      let i = 0
-      for (let cell of edit_row.cells) {
-        cell.innerText = current[i]
-        i += 1
-      }
-    }
-
-    function makeRow(){
-      const row = document.getElementById("editrow")
-      let i = 0
-      let values = []
-      for (let cell of row.cells) {
-        if (cell.className === "dropcell" || cell.className === "datecell"){
-          values.push(cell.childNodes[1].value)
-        }
-        else {values.push(cell.innerText)}
-        i += 1
-      }
-      sendToDatabase(values)
-    }
-
-    async function sendToDatabase(values) {
-      resp = await fetch("/buildings", {
-        method:"PUT",
-        headers:{'Content-Type': 'application/json' },
-        body: JSON.stringify({values})
-      })
-      .then((resp) => {
-        location.href = resp.url
-      })
-    }
-
+    const tablename = "buildings"
     init()
-
-    </script>
   {% endblock %}

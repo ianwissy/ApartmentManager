@@ -1,11 +1,11 @@
-{% extends 'base.html'%}
+{% extends 'newbase.html'%}
   {% block content %}
     <h2> Add Private Tenant Information </h2>
     <table id=datatable>
       <thead>
         <th>TenantID</th>
-        <th>SSN</th>
-        <th>CCN</th>
+        <th>Social Security Number</th>
+        <th>Credit Card Number</th>
       </thead>
       <tbody>
         <tr id="newrow">
@@ -16,57 +16,9 @@
       </tbody>
     </table>
     <button onclick="addRow()"> Add Row </button>
-    <script>
-      let tenantIds = {{tenants | safe}}
-
-      function makeDropdown(list, id){
-        dropdown = document.getElementById(id)
-        for (let row of list) {
-          let text = ""
-          for (let cell of row) {
-            text = text + cell + " "
-          }
-          drop = document.createElement("option")
-          drop.setAttribute("value", row[0])
-          drop.innerText = text
-          dropdown.appendChild(drop)
-        }
-      }
-
-      function addRow(){
-        const row = document.getElementById("newrow")
-        let i = 0
-        let values = []
-        for (let cell of row.cells) {
-          if (cell.className === "dropcell" || cell.className === "datecell"){
-            values.push(cell.childNodes[1].value)
-          }
-          else {
-            console.log(cell.innerText)
-            if (cell.innerText === "") {
-              values.push("NULL")
-            }
-            else {
-              values.push(cell.innerText)
-            }
-          }
-          i += 1
-        }
-        console.log(values)
-        addToDatabase(values)
-      }
-
-      async function addToDatabase(values) {
-        resp = await fetch("/tenantinformation", {
-          method:"POST",
-          headers:{'Content-Type': 'application/json' },
-          body: JSON.stringify({values})
-        })
-        .then((resp) => {
-          location.href = resp.url
-        })
-      }
-
-      makeDropdown(tenantIds, "tenants")
-    </script>
+  {% endblock %}
+  {% block script %}
+    let tenantIds = {{tenants | safe}}
+    const tablename = "tenants"
+    makeDropdown(tenantIds, "tenants")
   {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'newbase.html'%}
   {% block content %}
     <h2> Add Maintenance Request </h2>
     <table id=datatable>
@@ -20,56 +20,11 @@
       </tbody>
     </table>
     <button onclick="addRow()"> Add Row </button>
-    <script>
-      let tenantIds = {{tenants | safe}}
-      let unitIds = {{units | safe}}
-
-      function makeDropdown(list, id, nullable){
-        dropdown = document.getElementById(id)
-        for (let row of list) {
-          let text = ""
-          for (let cell of row) {
-            text = text + cell + " "
-          }
-          drop = document.createElement("option")
-          drop.setAttribute("value", row[0])
-          drop.innerText = text
-          dropdown.appendChild(drop)
-        }
-        if (nullable === 1){
-          drop = document.createElement("option")
-          drop.setAttribute("value", "NULL")
-          drop.innerText = "None"
-          dropdown.appendChild(drop)
-        }
-      }
-
-      function addRow(){
-        const row = document.getElementById("newrow")
-        let i = 0
-        let values = []
-        for (let cell of row.cells) {
-          if (cell.className === "dropcell" || cell.className === "datecell"){
-            values.push(cell.childNodes[1].value)
-          }
-          else {values.push(cell.innerText)}
-          i += 1
-        }
-        addToDatabase(values)
-      }
-
-      async function addToDatabase(values) {
-        resp = await fetch("/maintenance", {
-          method:"POST",
-          headers:{'Content-Type': 'application/json' },
-          body: JSON.stringify({values})
-        })
-        .then((resp) => {
-          location.href = resp.url
-        })
-      }
-
-      makeDropdown(unitIds, "units", 0)
-      makeDropdown(tenantIds, "tenants", 1)
-    </script>
+  {% endblock %}
+  {% block script %}
+    let tenantIds = {{tenants | safe}}
+    let unitIds = {{units | safe}}
+    const tablename = "maintenance"
+    makeDropdown(unitIds, "units", 0)
+    makeDropdown(tenantIds, "tenants", 1)
   {% endblock %}

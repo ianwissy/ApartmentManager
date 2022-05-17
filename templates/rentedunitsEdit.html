@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'editbase.html'%}
   {% block content %}
     <h2> Edit Rented Unit </h2>
     <table id=datatable>
@@ -18,67 +18,13 @@
       </tbody>
     </table>
     <button onclick="makeRow()"> Submit </button>
-    <script>
-      let tenantIds = {{tenants | safe}}
-      let current = {{current | safe}}
-      let unitIds = {{units | safe}}
-
-      function init(){
-        console.log(current)
-        const edit_row = document.getElementById("editrow")
-        let i = 0
-        for (let cell of edit_row.cells) {
-          if (cell.className === "dropcell" || cell.className === "datecell"){
-            cell.childNodes[1].value = current[i]
-          }
-          else {
-            cell.innerText = current[i]
-          }
-          i += 1
-        }
-      }
-
-      function makeDropdown(list, id){
-        dropdown = document.getElementById(id)
-        for (let row of list) {
-          let text = ""
-          for (let cell of row) {
-            text = text + cell + " "
-          }
-          drop = document.createElement("option")
-          drop.setAttribute("value", row[0])
-          drop.innerText = text
-          dropdown.appendChild(drop)
-        }
-      }
-
-      function makeRow(){
-        const row = document.getElementById("editrow")
-        let i = 0
-        let values = []
-        for (let cell of row.cells) {
-          if (cell.className === "dropcell" || cell.className === "datecell"){
-            values.push(cell.childNodes[1].value)
-          }
-          else {values.push(cell.innerText)}
-          i += 1
-        }
-        sendToDatabase(values)
-      }
-
-      async function sendToDatabase(values) {
-        resp = await fetch("/rentedunits", {
-          method:"PUT",
-          headers:{'Content-Type': 'application/json' },
-          body: JSON.stringify({values})
-        })
-        .then((resp) => {
-          location.href = resp.url
-        })
-      }
-
-      makeDropdown(unitIds, "units")
-      makeDropdown(tenantIds, "tenants")
-      init()
-    </script>
+  {% endblock %}
+  {% block script %}
+    let tenantIds = {{tenants | safe}}
+    let current = {{current | safe}}
+    let unitIds = {{units | safe}}
+    const tablename = "rentedunits"
+    makeDropdown(unitIds, "units")
+    makeDropdown(tenantIds, "tenants")
+    init()
   {% endblock %}

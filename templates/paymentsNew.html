@@ -22,7 +22,7 @@
       let tenantIds = {{tenants | safe}}
       let unitIds = {{units | safe}}
 
-      function makeDropdown(list, id, nullable){
+      function makeDropdown(list, id, nullable=0){
         dropdown = document.getElementById(id)
         for (let row of list) {
           let text = ""

@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'tablebase.html'%}
   {% block content %}
     <h2> Rented Units </h2>
     <table id=datatable>
@@ -15,50 +15,9 @@
       </thead>
     </table>
     <button onclick="location.href='./rentedunits/new'"> New Row </button>
-    <script>
-
-        let input_data = {{table | safe}}
-
-        function makeTable(data) {
-          const dataTable = document.getElementById("datatable");
-          let tableBody = document.createElement("tbody")
-          tableBody.setAttribute("id","tablebody")
-          dataTable.appendChild(tableBody)
-          for (let row in data){
-            let tableRow = document.createElement("tr");
-            for (let cell in data[row]){
-              let tableCell = document.createElement("td");
-              tableCell.innerText = data[row][cell]
-              tableRow.appendChild(tableCell)
-            }
-            let editCell = document.createElement("td")
-            editCell.innerHTML = "<i class='fa-solid fa-file-pen' onclick='editRow(event)'></i>"
-            tableRow.appendChild(editCell)
-            let deleteCell = document.createElement("td");
-            deleteCell.innerHTML = "<i class='fa-solid fa-trash' onclick='deleteRow(event)'></i>"
-            tableRow.appendChild(deleteCell)
-            tableBody.appendChild(tableRow)
-          }
-        }
-
-        async function deleteRow(event){
-          let row = event.target.parentElement.parentElement
-          let table = event.target.parentElement.parentElement.parentElement.parentElement
-          let id = row.cells[0].innerText
-          let id_name = table.rows[0].cells[0].innerText
-          const response = await fetch(`rentedunits/delete/${id_name}/${id}`, {method:"GET"})
-          const resp = response.json()
-          .then(resp => {
-            document.getElementById("tablebody").remove()
-            makeTable(resp)
-          })
-        }
-
-        function editRow(){
-          let id = event.target.parentElement.parentElement.cells[0].innerText
-          location.href = "/rentedunits/update?data=" + id
-        }
-
-        makeTable(input_data)
-    </script>
-  {% endblock %}
+    {% endblock %}
+    {% block script %}
+      let tablename = "rentedunits"
+      let input_data = {{table | safe}}
+      makeTable(input_data)
+    {% endblock %}

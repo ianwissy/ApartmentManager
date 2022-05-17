@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://kit.fontawesome.com/43d9f158ac.js" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <title> Apartment Management Helper </title>
+  <link rel="stylesheet" href="..\static\style.css" />
+</head>
+<body>
+  <div id="content">
+    <div id="spacing">
+      <header>
+        <nav>
+          <h1>Apartment Management Solutions</h1>
+          <a class="link" href="/">
+            Home
+          </a>
+          <a class="link" href="/buildings">
+            Buildings
+          </a>
+          <a class="link" href="/unittypes">
+            Types of Units
+          </a>
+          <a class="link" href="/units">
+            Units
+          </a>
+          <a class="link" href="/tenants">
+            Tenants
+          </a>
+          <a class="link" href="/rentedunits">
+            Rented Units
+          </a>
+          <a class="link" href="/maintenance">
+            Maintenance
+          </a>
+          <a class="link" href="/payments">
+            Payments
+          </a>
+          <a class="link" href="/tenantinformation">
+            Tenant Information
+          </a>
+        </nav>
+      </header>
+      {% block content %}
+      {% endblock %}
+      <script>
+
+        function makeDropdown(list, id, nullable=0){
+          dropdown = document.getElementById(id)
+          for (let row of list) {
+            let text = ""
+            for (let cell of row) {
+              text = text + cell + " "
+            }
+            drop = document.createElement("option")
+            drop.setAttribute("value", row[0])
+            drop.innerText = text
+            dropdown.appendChild(drop)
+          }
+          if (nullable === 1){
+            drop = document.createElement("option")
+            drop.setAttribute("value", "NULL")
+            drop.innerText = "None"
+            dropdown.appendChild(drop)
+          }
+        }
+
+        function addRow(){
+          const row = document.getElementById("newrow")
+          let i = 0
+          let values = []
+            for (let cell of row.cells) {
+              if (cell.className === "dropcell" || cell.className === "datecell"){
+                values.push(cell.childNodes[1].value)
+              }
+            else {values.push(cell.innerText)}
+            i += 1
+          }
+          addToDatabase(values)
+        }
+
+        async function addToDatabase(values) {
+          resp = await fetch(`/${tablename}`, {
+            method:"POST",
+            headers:{'Content-Type': 'application/json' },
+            body: JSON.stringify({values})
+          })
+          .then((resp) => {
+            location.href = resp.url
+          })
+        }
+
+      {% block script %}
+      {% endblock %}
+      </script>
+      <footer>
+        Ian Wyse - Nicola Sisca - 2022
+      </footer>
+    </div>
+  </div>
+</body>

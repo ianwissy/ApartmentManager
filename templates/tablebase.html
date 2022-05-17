@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://kit.fontawesome.com/43d9f158ac.js" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <title> Apartment Management Helper </title>
+  <link rel="stylesheet" href="..\static\style.css" />
+</head>
+<body>
+  <div id="content">
+    <div id="spacing">
+      <header>
+        <nav>
+          <h1>Apartment Management Solutions</h1>
+          <a class="link" href="/">
+            Home
+          </a>
+          <a class="link" href="/buildings">
+            Buildings
+          </a>
+          <a class="link" href="/unittypes">
+            Types of Units
+          </a>
+          <a class="link" href="/units">
+            Units
+          </a>
+          <a class="link" href="/tenants">
+            Tenants
+          </a>
+          <a class="link" href="/rentedunits">
+            Rented Units
+          </a>
+          <a class="link" href="/maintenance">
+            Maintenance
+          </a>
+          <a class="link" href="/payments">
+            Payments
+          </a>
+          <a class="link" href="/tenantinformation">
+            Tenant Information
+          </a>
+        </nav>
+      </header>
+      {% block content %}
+      {% endblock %}
+      <script>
+
+        function makeTable(data) {
+          const dataTable = document.getElementById("datatable");
+          let tableBody = document.createElement("tbody")
+          tableBody.setAttribute("id","tablebody")
+          dataTable.appendChild(tableBody)
+          for (let row in data){
+            let tableRow = document.createElement("tr");
+            for (let cell in data[row]){
+              let tableCell = document.createElement("td");
+              tableCell.innerText = data[row][cell]
+              tableRow.appendChild(tableCell)
+            }
+            let editCell = document.createElement("td")
+            editCell.innerHTML = "<i class='fa-solid fa-file-pen' onclick='editRow(event)'></i>"
+            tableRow.appendChild(editCell)
+            let deleteCell = document.createElement("td");
+            deleteCell.innerHTML = "<i class='fa-solid fa-trash' onclick='deleteRow(event)'></i>"
+            tableRow.appendChild(deleteCell)
+            tableBody.appendChild(tableRow)
+          }
+        }
+
+        async function deleteRow(event){
+          let row = event.target.parentElement.parentElement
+          let table = event.target.parentElement.parentElement.parentElement.parentElement
+          let id = row.cells[0].innerText
+          let id_name = table.rows[0].cells[0].innerText
+          const response = await fetch(`${tablename}/delete/${id_name}/${id}`, {method:"GET"})
+          const resp = response.json()
+          .then(resp => {
+            document.getElementById("tablebody").remove()
+            makeTable(resp)
+          })
+        }
+
+        function editRow(){
+          let id = event.target.parentElement.parentElement.cells[0].innerText
+          location.href = `/${tablename}/update?data=` + id
+        }
+
+      {% block script %}
+      {% endblock %}
+
+      </script>
+      <footer>
+        Ian Wyse - Nicola Sisca - 2022
+      </footer>
+    </div>
+  </div>
+</body>
