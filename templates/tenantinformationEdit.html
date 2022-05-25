@@ -4,12 +4,16 @@
     <table id=datatable>
       <thead>
         <th>TenantID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Social Security Number</th>
         <th>Credit Card Number</th>
       </thead>
       <tbody>
         <tr id="editrow">
-          <td class="dropcell"> <select name="tenants" class="dropdown" id="tenants" /> </td>
+          <td></td>
+          <td></td>
+          <td></td>
           <td contenteditable="true"></td>
           <td contenteditable="true"></td>
         </tr>
@@ -21,6 +25,6 @@
     let tenantIds = {{tenants | safe}}
     let current = {{current | safe}}
     const tablename = "tenantinformation"
-    makeDropdown(tenantIds, "tenants")
+    // makeDropdown(tenantIds, "tenants")
     init()
   {% endblock %}

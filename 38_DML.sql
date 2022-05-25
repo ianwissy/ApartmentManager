@@ -1,15 +1,15 @@
--- 1. Main 
+-- 1. Main
 
 -- search by tenant name
-SELECT FirstName, LastName, Type, BuildingName, Price 
+SELECT FirstName, LastName, Type, BuildingName, Price
 FROM Tenants INNER JOIN RentedUnits
-ON Tenants.TenantID = RentedUnits.TenantID 
-INNER JOIN Units 
-ON RentedUnits.UnitID = Units.UnitID 
-INNER JOIN Buildings 
-ON Units.BuildingID = Buildings.BuildingID 
-INNER JOIN UnitTypes 
-ON Units.UnitTypeID = UnitTypes.UnitTypeID 
+ON Tenants.TenantID = RentedUnits.TenantID
+INNER JOIN Units
+ON RentedUnits.UnitID = Units.UnitID
+INNER JOIN Buildings
+ON Units.BuildingID = Buildings.BuildingID
+INNER JOIN UnitTypes
+ON Units.UnitTypeID = UnitTypes.UnitTypeID
 WHERE FirstName=:first_name AND LastName=:last_name
 
 -- 2. Buildings
@@ -52,11 +52,11 @@ WHERE TenantID=:ID;
 -- get Tenant keys
 SELECT TenantID, FirstName, LastName FROM Tenants;
 
--- 4. Units 
+-- 4. Units
 
 -- populate Units table
 SELECT UnitId, AptNum, Price, Rented, Note, BuildingName, Type FROM Units
-INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID;
 
 -- insert into Units
@@ -77,7 +77,7 @@ WHERE TenantID=:ID;
 SELECT * from UnitsTypes;
 
 -- insert into UnitTypes
-INSERT INTO UnitTypes (Type) 
+INSERT INTO UnitTypes (Type)
 VALUES(:typeInput);
 
 -- delete a Unit
@@ -95,17 +95,17 @@ SELECT UnitTypeID, TYPE FROM UnitTypes;
 
 -- populate Payments table
 SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM Units
-INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
-INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID
 RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID
 LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID;
 
 -- filter Payments data by payment date
-SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM 
-Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
-INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
-RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID 
-LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID 
+SELECT PaymentID, Date, Amount, AptNum, BuildingName, FirstName, LastName FROM
+Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID
+RIGHT JOIN Payments ON Units.UnitID=Payments.UnitID
+LEFT JOIN Tenants ON Payments.TenantID=Tenants.TenantID
 WHERE Date BETWEEN :start_date AND :end_date;
 
 -- insert into Payments
@@ -124,9 +124,9 @@ WHERE PaymentID=:ID;
 
 -- populate Rented Units table
 SELECT RentalID, AptNum, BuildingName, Type, FirstName, LastName, StartDate FROM Units
-INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
-INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
-INNER JOIN RentedUnits ON Units.UnitID=RentedUnits.UnitID 
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID
+INNER JOIN RentedUnits ON Units.UnitID=RentedUnits.UnitID
 INNER JOIN Tenants ON RentedUnits.TenantID=Tenants.TenantID;
 
 -- insert into RentedUnits
@@ -145,17 +145,17 @@ WHERE RentalID=:ID;
 
 -- populate Maintenance table
 SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM Units
-INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
-INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
-INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID 
+INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID
+INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID
 LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID;
 
 -- filter Maintenance data by date
-SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM 
-Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID 
-INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID 
-INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID 
-LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID 
+SELECT RequestID, AptNum, BuildingName, FirstName, LastName, RequestDate, Completed, RequestNote FROM
+Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
+INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID
+INNER JOIN MaintenanceRequests ON Units.UnitID=MaintenanceRequests.UnitID
+LEFT JOIN Tenants ON MaintenanceRequests.TenantID=Tenants.TenantID
 WHERE RequestDate BETWEEN :start_date AND :end_date;
 
 -- insert into MaintenanceRequests
@@ -176,13 +176,17 @@ WHERE RequestID=:ID;
 SELECT Tenants.TenantID, FirstName, LastName, SSN, CCN FROM Tenants
 INNER JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID;
 
--- insert into MaintenanceRequests
+-- insert into Tenant Information
 INSERT INTO `TenantInformation` (`TenantID`, `SSN`, `CCN`)
 VALUES (:tidInput, :ssnInput, :ccnInput);
 
-
 -- delete Tenant Information
 DELETE FROM TenantInformation WHERE TenantID=:ID;
+
+-- populate tenant edit row
+SELECT Tenants.TenantID, FirstName, LastName, SSN, CCN FROM Tenants
+INNER JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID
+WHERE Tenants.TenantID = :ID;
 
 -- edit Tenant Information
 UPDATE TenantInformation

@@ -49,8 +49,11 @@
           dropdown = document.getElementById(id)
           for (let row of list) {
             let text = ""
+            let i = 0
             for (let cell of row) {
-              text = text + cell + " "
+              if (i === 0) {text = text + cell + " - "}
+              else {text = text + cell + " "}
+              i += 1
             }
             drop = document.createElement("option")
             drop.setAttribute("value", row[0])
@@ -70,10 +73,10 @@
           let i = 0
           let values = []
             for (let cell of row.cells) {
-              if (cell.className === "dropcell" || cell.className === "datecell"){
-                values.push(cell.childNodes[1].value)
+              if (cell.getAttribute("contenteditable") === "true"){
+                values.push(cell.innerText)
               }
-            else {values.push(cell.innerText)}
+              else {values.push(cell.childNodes[1].value)}
             i += 1
           }
           addToDatabase(values)

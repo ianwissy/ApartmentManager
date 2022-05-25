@@ -400,7 +400,10 @@ def infonew():
 def edit_tenantinformation():
     tenants = json.dumps(tenants_keys(), default=str)
     id = request.args.get("data")
-    row = list(get_query("SELECT * FROM TenantInformation WHERE TenantID=" + id)[0])
+    query = "SELECT Tenants.TenantID, FirstName, LastName, SSN, CCN FROM Tenants \
+            INNER JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID \
+            WHERE Tenants.TenantID=" + id
+    row = list(get_query(query)[0])
     row = json.dumps(row, default=str)
     return render_template("tenantinformationEdit.html", current=row, tenants=tenants)
 

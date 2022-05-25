@@ -9,15 +9,17 @@
       </thead>
       <tbody>
         <tr id="newrow">
-          <td class="dropcell"> <select name="units" class="dropdown" id="units" /> </td>
-          <td class="dropcell"> <select name="tenants" class="dropdown" id="tenants" /> </td>
-          <td class="datecell"> <input type="date" id="start" class="datepicker"/> </td>
+          <td class="inputcell"> <select name="units" class="input" id="units" /> </td>
+          <td class="inputcell"> <select name="tenants" class="input" id="tenants" /> </td>
+          <td class="inputcell"> <input type="date" class="input"/> </td>
         </tr>
       </tbody>
     </table>
     <button onclick="addRow()"> Add Row </button>
   {% endblock %}
   {% block script %}
+    let unitIds = {{units | safe}}
+    let tenantIds = {{tenants | safe}}
     const tablename = "rentedunits"
     makeDropdown(unitIds, "units")
     makeDropdown(tenantIds, "tenants")

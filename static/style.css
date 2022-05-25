@@ -1,3 +1,4 @@
+/* Base UI Elements */
 body{
   font-family: sans-serif;
   background-color: #f8f8ff;
@@ -12,12 +13,21 @@ header{
   margin-bottom: 2%;
 }
 
+footer{
+ height: 1.0rem;
+ color: rgb(100,100,100);
+ position: absolute;
+ bottom: 0;
+ text-align: center;
+ width: 100%
+}
+
 a{
   color: black;
   font-size: 14pt;
   text-decoration: none;
-  margin-left:4px;
-  margin-right: 4px;
+  margin-left:5px;
+  margin-right:5px;
 
 }
 a:hover{
@@ -31,9 +41,9 @@ h1{
   display: inline;
 }
 
-h3{
-  font-size: 26pt;
+h2{
   text-align: center;
+  font-size: 26pt;
 }
 
 h4{
@@ -56,7 +66,7 @@ p{
 }
 
 .inputrow{
-  display:flex;
+  display: flex;
   flex-direction: row;
   margin-left: auto;
   margin-right: auto;
@@ -87,7 +97,7 @@ label{
 #content{
   position: relative;
   min-height: 99vh;
-  margin: -0;
+  margin: 0;
   padding: 0;
   justify-content: center;
 }
@@ -113,43 +123,29 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 
-.dropcell{
+.inputcell{
   padding: 0;
+  margin: 0;
 }
 
-.dropdown{
-  font-size: 100%;
+.date{
+  font-family: sans-serif;
+  font-size: 12pt;
+  margin-top: -3px;
+}
+
+.input{
   width: 100%;
-  min-height: 100%;
-}
-
-.datecell{
-  padding: 0;
+  border: none;
+  background-color: inherit;
   margin: 0;
-}
-
-.datepicker {
-  width: 98.5%;
-  min-height: 100%;
-  margin: 0;
+  font-family: sans-serif;
+  min-height: 30px;
+  font-size: 12pt;
 }
 
 button{
   display: block;
   margin-left: auto;
   margin-right: auto;
-}
-
-h2{
-  text-align: center;
-  font-size: 26pt;
-}
-
-footer{
- height: 1.0rem;
- color: rgb(100,100,100);
- position: absolute;
- bottom: 0;
- text-align: center;
- width: 100%
 }
