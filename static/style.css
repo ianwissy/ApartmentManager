@@ -142,6 +142,7 @@ tr:nth-child(even) {
   font-family: sans-serif;
   min-height: 30px;
   font-size: 12pt;
+  padding: 0;
 }
 
 button{

@@ -67,7 +67,6 @@ CREATE OR REPLACE TABLE Units (
   `UnitID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `AptNum` varchar(8) NOT NULL,
   `Price` decimal(12,2) NOT NULL,
-  `Rented` tinyint(1) NOT NULL,
   `Note` text DEFAULT NULL,
   `BuildingID` int(11) NOT NULL,
   `UnitTypeID` int(11) NOT NULL,
@@ -75,13 +74,13 @@ CREATE OR REPLACE TABLE Units (
   CONSTRAINT FOREIGN KEY (UnitTypeID) REFERENCES UnitTypes(UnitTypeID) ON DELETE CASCADE
 );
 
-INSERT INTO `Units` (`AptNum`, `Price`, `Rented`, `Note`, `BuildingID`, `UnitTypeID`) VALUES
-('406', '1600.34', 1, '4th floor corner', 1, 1),
-('112', '1950.34', 0, '1st floor center no view', 1, 2),
-('208', '2400.00', 0, NULL, 2, 3),
-('06S', '500.35', 1, NULL, 2, 5),
-('302', '2140.00', 1, NULL, 3, 2),
-('02G', '800.00', 1, NULL, 3, 4);
+INSERT INTO `Units` (`AptNum`, `Price`, `Note`, `BuildingID`, `UnitTypeID`) VALUES
+('406', '1600.34', '4th floor corner', 1, 1),
+('112', '1950.34', '1st floor center no view', 1, 2),
+('208', '2400.00', NULL, 2, 3),
+('06S', '500.35', NULL, 2, 5),
+('302', '2140.00', NULL, 3, 2),
+('02G', '800.00', NULL, 3, 4);
 
 -- --------------------------------------------------------
 

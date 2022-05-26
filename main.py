@@ -6,10 +6,45 @@ import json
 app = Flask(__name__)
 
 
+def get_table(name):
+    query = "select * from " + name
+    return get_query(query)
+
+
+def tenants_keys():
+    query = "SELECT TenantID, FirstName, LastName FROM Tenants"
+    return get_query(query)
+
+
+def units_keys():
+    query = "SELECT UnitID, BuildingName, AptNum FROM Units \
+            INNER JOIN Buildings on Units.BuildingID=Buildings.BuildingId"
+    return get_query(query)
+
+
 def render_table(table, html):
     table = get_table(table)
     table = json.dumps(table, default=str)
     return render_template(html, table=table)
+
+
+def delete_row(table, id_name, id):
+    query = "DELETE FROM " + table + " WHERE " + id_name + "='" + id + "'"
+    send_query(query)
+
+
+def search(first_name, last_name):
+    query = "SELECT FirstName, LastName, Type, BuildingName, Price \
+            FROM Tenants INNER JOIN RentedUnits\
+            ON Tenants.TenantID = RentedUnits.TenantID \
+            INNER JOIN Units \
+            ON RentedUnits.UnitID = Units.UnitID \
+            INNER JOIN Buildings \
+            ON Units.BuildingID = Buildings.BuildingID \
+            INNER JOIN UnitTypes \
+            ON Units.UnitTypeID = UnitTypes.UnitTypeID \
+            WHERE FirstName='" + first_name + "' AND LastName='" + last_name + "';"
+    return get_query(query)
 
 
 @app.route("/")
@@ -138,7 +173,7 @@ def delete_unit_type(id_name, id):
 @app.route("/units", methods=["GET", "POST", "PUT"])
 def units():
     if request.method == "GET":
-        query = "SELECT UnitId, AptNum, Price, Rented, Note, BuildingName, Type FROM \
+        query = "SELECT UnitId, AptNum, Price, Note, BuildingName, Type FROM \
                 Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
                 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID"
         table = get_query(query)
@@ -146,30 +181,30 @@ def units():
         return render_template("units.html", table=table)
     elif request.method == "PUT":
         query = "UPDATE Units " \
-            "SET AptNum='"+request.json['values'][1]+"', Price="+request.json['values'][2]+", Rented="+request.json['values'][3]+", Note='"+request.json['values'][4]+"', " \
-            "BuildingID="+request.json['values'][5]+", UnitTypeID="+request.json['values'][6]+" " \
+            "SET AptNum='"+request.json['values'][1]+"', Price="+request.json['values'][2]+", Note='"+request.json['values'][3]+"', " \
+            "BuildingID="+request.json['values'][4]+", UnitTypeID="+request.json['values'][5]+" " \
             "WHERE UnitID="+request.json['values'][0]+";"
         send_query(query)
         return "/units"
     elif request.method == "POST":
-        query = "INSERT INTO Units (AptNum, Price, Rented, Note, BuildingID, UnitTypeID) VALUES \
-                ("+request.json['values'][0]+", "+request.json['values'][1]+", "+request.json['values'][2]+", \
-                '"+request.json['values'][3]+"', "+request.json['values'][4]+", "+request.json['values'][5]+");"
+        query = "INSERT INTO Units (AptNum, Price, Note, BuildingID, UnitTypeID) VALUES \
+                ('"+request.json['values'][0]+"', "+request.json['values'][1]+", \
+                '"+request.json['values'][2]+"', "+request.json['values'][3]+", "+request.json['values'][4]+");"
         send_query(query)
         return "/units"
 
 
 @app.route("/units/new")
 def new_unit():
-    types = json.dumps(types_keys(), default=str)
-    buildings = json.dumps(building_keys(), default=str)
+    types = json.dumps(get_query("SELECT UnitTypeID, Type FROM UnitTypes"), default=str)
+    buildings = json.dumps(get_query("SELECT BuildingID, BuildingName FROM Buildings"), default=str)
     return render_template("unitsNew.html", buildings=buildings, types=types)
 
 
 @app.route("/units/update")
 def edit_unit():
-    types = json.dumps(types_keys(), default=str)
-    buildings = json.dumps(building_keys(), default=str)
+    types = json.dumps(get_query("SELECT UnitTypeID, Type FROM UnitTypes"), default=str)
+    buildings = json.dumps(get_query("SELECT BuildingID, BuildingName FROM Buildings"), default=str)
     id = request.args.get("data")
     row = list(get_query("SELECT * FROM Units WHERE UnitID=" + id)[0])
     row = json.dumps(row, default=str)
@@ -179,7 +214,7 @@ def edit_unit():
 @app.route("/units/delete/<id_name>/<id>")
 def delete_unit(id_name, id):
     delete_row("Units", id_name, id)
-    table = get_query("SELECT UnitId, AptNum, Price, Rented, Note, BuildingName, Type FROM \
+    table = get_query("SELECT UnitId, AptNum, Price, Note, BuildingName, Type FROM \
                 Units INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID \
                 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID")
     return json.dumps(table, default=str)
@@ -392,7 +427,10 @@ def tenantinformation():
 
 @app.route("/tenantinformation/new")
 def infonew():
-    tenants = json.dumps(tenants_keys(), default=str)
+    query = "SELECT TenantID, FirstName, LastName FROM Tenants \
+        WHERE Tenants.TenantID NOT IN (SELECT Tenants.TenantID FROM Tenants \
+        Inner JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID)"
+    tenants = json.dumps(get_query(query), default=str)
     return render_template("tenantinformationNew.html", tenants=tenants)
 
 

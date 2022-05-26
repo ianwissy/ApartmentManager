@@ -52,23 +52,28 @@ WHERE TenantID=:ID;
 -- get Tenant keys
 SELECT TenantID, FirstName, LastName FROM Tenants;
 
+-- get Restricted Tenant Keys
+SELECT TenantID, FirstName, LastName FROM Tenants
+WHERE Tenant.TenantID NOT IN Tenants
+Inner JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID
+
 -- 4. Units
 
 -- populate Units table
-SELECT UnitId, AptNum, Price, Rented, Note, BuildingName, Type FROM Units
+SELECT UnitId, AptNum, Price, Note, BuildingName, Type FROM Units
 INNER JOIN Buildings ON Units.BuildingID=Buildings.BuildingID
 INNER JOIN UnitTypes ON Units.UnitTypeID=UnitTypes.UnitTypeID;
 
 -- insert into Units
-INSERT INTO Units (AptNum, Price, Rented, Note, BuildingID, UnitTypeID) VALUES
-(:AptNumInput, :priceInput, :rentedInput, :noteInput, :bidInput, :uidInput);
+INSERT INTO Units (AptNum, Price, Note, BuildingID, UnitTypeID) VALUES
+(:AptNumInput, :priceInput, :noteInput, :bidInput, :uidInput);
 
 -- delete a Unit
 DELETE FROM Units WHERE UnitID=:ID;
 
 -- edit a Unit
 UPDATE Units
-SET AptNum=AptNumInput, Price=:priceInput, Rented=:rentedInput, Note=:noteInput, BuildingID=:bidInput, UnitTypeID=:uidInput
+SET AptNum=AptNumInput, Price=:priceInput, Note=:noteInput, BuildingID=:bidInput, UnitTypeID=:uidInput
 WHERE TenantID=:ID;
 
 -- 5. Unit Types
@@ -88,7 +93,7 @@ UPDATE UnitTypes
 SET Type=:typeInput
 WHERE UnitTypeID=:ID;
 
--- get types keys
+-- get UnitTypes keys
 SELECT UnitTypeID, TYPE FROM UnitTypes;
 
 -- 6. Payments
@@ -183,10 +188,11 @@ VALUES (:tidInput, :ssnInput, :ccnInput);
 -- delete Tenant Information
 DELETE FROM TenantInformation WHERE TenantID=:ID;
 
--- populate tenant edit row
+-- populate Tenant Information Edit Row
 SELECT Tenants.TenantID, FirstName, LastName, SSN, CCN FROM Tenants
 INNER JOIN TenantInformation ON Tenants.TenantID=TenantInformation.TenantID
 WHERE Tenants.TenantID = :ID;
+
 
 -- edit Tenant Information
 UPDATE TenantInformation
